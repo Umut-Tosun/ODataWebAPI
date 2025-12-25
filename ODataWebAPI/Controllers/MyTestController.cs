@@ -18,10 +18,12 @@ namespace ODataWebAPI.Controllers
         public static IEdmModel GetEdmModel()
         {
             ODataConventionModelBuilder builder1 = new();
+            builder1.EnableLowerCamelCase();
             builder1.EntitySet<Category>("Categories");
             builder1.EntitySet<Product>("Products");
             builder1.EntitySet<ProductDto>("ProductsDto");
             builder1.EntitySet<User>("Users");
+            builder1.EntitySet<UserDto>("UsersDto");
             return builder1.GetEdmModel();
         }
 
@@ -71,5 +73,29 @@ namespace ODataWebAPI.Controllers
             return users;
         }
         #endregion
+        #region UsersDto
+        [HttpGet("users-dto")]
+        public IQueryable<UserDto> UsersDto()
+        {
+            var usersDto = applicationDbContext.Users
+                .Select(s => new UserDto
+                {
+                    Id = s.Id,
+                    FirstName = s.FirstName,
+                    LastName = s.LastName,
+                    FullName = s.FullName,
+                    Address = s.Address,
+                    UserType = s.UserType,
+                    UsertTypeName = s.UserType.Name,
+                    UserTypeValue = s.UserType.Value,
+
+                }).AsQueryable();
+
+            return usersDto;
+           
+        }
+        #endregion
+
+
     }
 }
