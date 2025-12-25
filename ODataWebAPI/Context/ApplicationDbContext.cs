@@ -9,5 +9,31 @@ namespace ODataWebAPI.Context
         {
         }
         public DbSet<Category> Categories { get; set; } 
+        public DbSet<Product> Products { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Product>(builder =>
+            {
+                builder.Property(p => p.Price)
+                       .HasColumnType("money");
+
+              
+            });
+            modelBuilder.Entity<User>(builder =>
+            {
+                builder.Property(p => p.UserType)
+                    .HasConversion(type => type.Value, value => UserTypeEnum.FromValue(value));
+                
+                builder.OwnsOne(p => p.Address, addressBuilder =>
+                {
+                    addressBuilder.Property(a => a.City).HasColumnName("City");
+                    addressBuilder.Property(a => a.Town).HasColumnName("Town");
+                    addressBuilder.Property(a => a.FullAddress).HasColumnName("FullAddress");
+                });
+
+            });
+        }
     }
 }

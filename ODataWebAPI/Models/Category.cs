@@ -1,4 +1,6 @@
-﻿namespace ODataWebAPI.Models
+﻿using Bogus.DataSets;
+
+namespace ODataWebAPI.Models
 {
     public sealed class Category
     {
